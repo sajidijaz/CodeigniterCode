@@ -70,4 +70,28 @@ class HomeController extends CI_Controller {
         echo json_encode($response);
 	}
 
+	 /** @description
+     * Search the products and return the data in json
+     * @return none
+     * @param none
+     */
+    public function search_products()
+    {
+        $term = $this->input->get('term');
+        $result = $this->products->search($term);
+        echo json_encode($result);
+	}
+
+
+    /** @description
+     * Search the customers and return the data in json
+     * @return none
+     * @param none
+     */
+    public function search_customers()
+    {
+        $term = $this->input->get('term');
+        $result = $this->customers->search($term);
+        echo json_encode($result);
+	}
 }
