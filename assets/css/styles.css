@@ -1,0 +1,9 @@
+.file-drop-zone, .file-preview{
+    overflow: hidden;
+}
+.file-error-message{
+    clear: both;
+}
+.padding-top{
+    padding-top: 4.5em
+}
