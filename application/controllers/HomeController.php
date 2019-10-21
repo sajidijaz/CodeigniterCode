@@ -9,6 +9,10 @@ class HomeController extends CI_Controller {
     public function __construct()
     {
         parent::__construct();
+	$this->load->model('Customers','customers');
+        $this->load->model('Products','products');
+        $this->load->model('Sales','sales');
+        $this->load->model('Home_model','home_model');
     }
 
     /** @description
@@ -33,6 +37,37 @@ class HomeController extends CI_Controller {
         $data['title']      = 'Import - Code Challenge';
         $data['view_file']  = $this->load->view('pages/import',$data,true);
         $this->load->view('template',$data);
+	}
+
+	/**
+     *
+     */
+    public function read_json()
+    {
+        $result = file_get_contents($_FILES['file']['tmp_name']);
+        $data = json_decode($result,true);
+        $response = array('message'=> "File is not uploaded");
+        if(!empty($data)){
+            foreach($data as $key => $value){
+                try{
+                    $customer_id = save_customer($value);
+                    $product_id  = save_product($value);
+                    /* Sales Insertion */
+                    $sales = array(
+                        'customer_id'   => $customer_id,
+                        'product_id'    =>  $product_id,
+                        'created_at'    => $value['sale_date']
+                    );
+                    $insert = $this->sales->save($sales);
+                    if($insert)
+                        $response = array('message'=>"File is uploaded successfully");
+                }catch (Exception $e){
+                    $response= array('message'=>$e->getMessage());
+                }
+
+            }
+        }
+        echo json_encode($response);
 	}
 
 }
