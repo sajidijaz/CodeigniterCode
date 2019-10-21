@@ -94,4 +94,18 @@ class HomeController extends CI_Controller {
         $result = $this->customers->search($term);
         echo json_encode($result);
 	}
+
+    /** @description
+     * That function call when we submit the filter
+     * form and load the html table with data
+     * @param none
+     * @return none
+     */
+    public function filter_submit()
+    {
+        $post_data = $this->input->post();
+        $data['result'] = $this->home_model->filter($post_data);
+        echo $this->load->view('partial/filter_data',$data,true);
+	}	
+
 }
